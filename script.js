@@ -1,3 +1,4 @@
+// js file 
 let localDbValues = [];     // array to store db values for each loop withing the refresh_rate
 let refresh_rate = 500;
 let color = 'green';
@@ -36,8 +37,26 @@ navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream)
         document.getElementById("offset_value").innerText = offset;
         value = rms + offset;
         localDbValues.push(value);
+
+        // Determine if the voice is male or female based on pitch
+        let voiceType = analyzeVoicePitch(rms);
+        console.log("Voice type: " + voiceType);
     };
 })
+
+// Analyze pitch to determine if the voice is male or female
+function analyzeVoicePitch(rms) {
+    if (rms < 50) {
+        return "Silent"; // No voice detected
+    } else {
+        // Adjust these thresholds based on your observations and testing
+        if (rms < 200) {
+            return "Female";
+        } else {
+            return "Male";
+        }
+    }
+}
 
 // update the volume every refresh_rate m.seconds
 let updateDb = function() {
